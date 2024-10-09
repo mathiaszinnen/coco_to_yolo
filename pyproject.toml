@@ -3,8 +3,8 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "COCO_TO_YOLO"
-version = "0.0.16"
+name = "COCO_to_YOLO"
+version = "1.0.0"
 authors = [
   { name="Mathias Zinnen", email="mathias.zinnen@gmail.com" },
 ]
