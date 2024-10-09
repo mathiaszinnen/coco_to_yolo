@@ -52,10 +52,12 @@ def create_yaml(output_dir, name, test_ratio, val_ratio, classes):
         'path': '.',
         'train': 'images/train'
     }
-    if test_ratio > 0.0:
+    if test_ratio > 0.0 and val_ratio > 0.0:
         dataset_dict['test'] = 'images/test'
-    if val_ratio > 0.0:
         dataset_dict['val'] = 'images/valid'
+    if test_ratio > 0.0 and val_ratio == 0.0:
+        dataset_dict['val'] = 'images/test'
+
     class_dict = {}
     for i, cls in enumerate(classes):
         class_dict[i] = cls
