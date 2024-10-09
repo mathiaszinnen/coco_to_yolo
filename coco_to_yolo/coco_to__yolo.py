@@ -1,5 +1,4 @@
 import argparse
-import numpy as np
 from tqdm import tqdm
 import random
 import yaml
@@ -8,18 +7,6 @@ import sys
 import os
 import shutil
 import glob
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description='Convert COCO datasets to YOLO format.'
-    )
-    parser.add_argument('input_dir', help='Path to source COCO dataset directory.')
-    parser.add_argument('output_dir', help='Output directory to store converted YOLO dataset.')
-    parser.add_argument('--dataset_name', help='Dataset name to use for YOLO formatted output.', required=False, default='converted')
-    parser.add_argument('--test_ratio', help='Ratio of the data to be splitted for the test set. Please provide a number between 0.0 and 1.0', required=False, type=float, default=0.1)
-    parser.add_argument('--val_ratio', help='Ratio of the data to be splitted for the validation set. Please provide a number between 0.0 and 1.0', required=False, type=float, default=0.0)
-    return parser.parse_args()
 
 
 def has_valid_imagedir(input_dir):
@@ -59,7 +46,6 @@ def create_yolo_structure(output_dir, name, test_ratio, val_ratio):
     if val_ratio > 0.0:
         os.makedirs(f'{output_dir}/{name}/images/valid', exist_ok=True)
         os.makedirs(f'{output_dir}/{name}/labels/valid', exist_ok=True)
-    
 
 def create_yaml(output_dir, name, test_ratio, val_ratio, classes):
     dataset_dict = {
@@ -112,7 +98,6 @@ def create_annotation_map(coco):
             img_id_to_anns[img_id] = [ann]
     return img_id_to_anns
 
-
 def create_annotations(output_dir,name,split,coco,img_ids):
     img_id_to_anns = create_annotation_map(coco)
 
@@ -138,11 +123,6 @@ def create_annotations(output_dir,name,split,coco,img_ids):
         output_path = f'{output_dir}/{name}/labels/{split}/{image_identifier}.txt'
         with open(output_path, 'w') as f:
             f.write(img_ann_strings)
-        print('debug')
-        # write to txt
-
-
-
 
 def convert(args):
     annotations_path = glob.glob(f'{args.input_dir}/annotations/*.json')[0]
@@ -158,12 +138,17 @@ def convert(args):
     for img_ids, split in zip(split_ids, ['train', 'test', 'valid']):
         copy_images(args.input_dir,args.output_dir,args.dataset_name, img_ids, split, img_id_to_fn)
         create_annotations(args.output_dir,args.dataset_name,split,coco,img_ids)
-    
 
-     
-
-    classes = []
-
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Convert COCO datasets to YOLO format.'
+    )
+    parser.add_argument('input_dir', help='Path to source COCO dataset directory.')
+    parser.add_argument('output_dir', help='Output directory to store converted YOLO dataset.')
+    parser.add_argument('--dataset_name', help='Dataset name to use for YOLO formatted output.', required=False, default='converted')
+    parser.add_argument('--test_ratio', help='Ratio of the data to be splitted for the test set. Please provide a number between 0.0 and 1.0', required=False, type=float, default=0.1)
+    parser.add_argument('--val_ratio', help='Ratio of the data to be splitted for the validation set. Please provide a number between 0.0 and 1.0', required=False, type=float, default=0.0)
+    return parser.parse_args()
 
 def main():
     args = parse_args()
@@ -172,11 +157,6 @@ def main():
     validate_input(args.input_dir)
     create_yolo_structure(args.output_dir, args.dataset_name, args.test_ratio, args.val_ratio)
     convert(args)
-
-
-    print('debuggg')
-
-
 
 if __name__ == '__main__':
     main()

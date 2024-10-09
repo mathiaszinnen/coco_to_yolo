@@ -1,6 +1,10 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "COCO_TO_YOLO"
-version = "0.0.7"
+version = "0.0.16"
 authors = [
   { name="Mathias Zinnen", email="mathias.zinnen@gmail.com" },
 ]
@@ -13,7 +17,8 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-  "tqdm==4.66.5",
+  "tqdm",
+  "pyyaml"
 ]
 
 
@@ -23,3 +28,6 @@ Issues = "https://github.com/mathiaszinnen/coco_to_yolo/issues"
 
 [project.scripts]
 coco_to_yolo = "coco_to_yolo:main"
+
+[tool.setuptools]
+packages = ["coco_to_yolo"]
