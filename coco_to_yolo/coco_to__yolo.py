@@ -50,7 +50,7 @@ def create_yolo_structure(output_dir, name, test_ratio, val_ratio):
 def create_yaml(output_dir, name, test_ratio, val_ratio, classes):
     dataset_dict = {
         'path': '.',
-        'train': 'images/train'
+        'train': f'{name}/images/train'
     }
     if test_ratio > 0.0 and val_ratio > 0.0:
         dataset_dict['test'] = f'{name}/images/test'
