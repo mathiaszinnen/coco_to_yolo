@@ -10,7 +10,7 @@ import glob
 
 
 def has_valid_imagedir(input_dir):
-    image_path = f'{input_dir}/images'
+    image_path = f'{input_dir}/default/images'
     if not os.path.isdir(image_path):
         return False
     image_files = []
@@ -80,7 +80,7 @@ def copy_images(input_dir,output_dir,name,ids, split, img_id_map):
     print(f'Copying {split} images...')
     for id in tqdm(ids):
         fn = img_id_map[id]
-        shutil.copyfile(f'{input_dir}/images/{fn}', f'{output_dir}/{name}/images/{split}/{fn}')    
+        shutil.copyfile(f'{input_dir}/images/default/{fn}', f'{output_dir}/{name}/images/{split}/{fn}')    
 
 def to_yolo_bbox(bbox,im_w, im_h):
     x,y,w,h = bbox
