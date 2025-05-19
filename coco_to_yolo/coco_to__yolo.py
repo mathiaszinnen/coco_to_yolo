@@ -10,12 +10,11 @@ import glob
 
 
 def has_valid_imagedir(input_dir):
-    image_path = f'{input_dir}/default/images'
-    if not os.path.isdir(image_path):
+    if not os.path.isdir(input_dir):
         return False
     image_files = []
     for ext in ['*.jpg', '*.jpeg', '*.bmp']:
-        image_files.extend(glob.glob(f'{input_dir}/images/{ext}'))
+        image_files.extend(glob.glob(f'{input_dir}/**/{ext}', recursive=True))
     if len(image_files) == 0:
         return False
     return True
@@ -77,10 +76,15 @@ def create_splits(ids, test_ratio, val_ratio):
     return train_ids, test_ids, val_ids
 
 def copy_images(input_dir,output_dir,name,ids, split, img_id_map):
+    image_paths = []
+    for ext in ['*.jpg', '*.bmp', '*.jpeg']:
+        image_paths.extend(glob.glob(f'{input_dir}/**/{ext}', recursive=True))
     print(f'Copying {split} images...')
     for id in tqdm(ids):
         fn = img_id_map[id]
-        shutil.copyfile(f'{input_dir}/images/default/{fn}', f'{output_dir}/{name}/images/{split}/{fn}')    
+        print(image_paths)
+        path = [p for p in image_paths if os.path.basename(p) == fn][0]
+        shutil.copyfile(path, f'{output_dir}/{name}/images/{split}/{fn}')    
 
 def to_yolo_bbox(bbox,im_w, im_h):
     x,y,w,h = bbox
