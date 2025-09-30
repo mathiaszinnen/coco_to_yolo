@@ -13,7 +13,7 @@ def has_valid_imagedir(input_dir):
     if not os.path.isdir(input_dir):
         return False
     image_files = []
-    for ext in ['*.jpg', '*.jpeg', '*.bmp']:
+    for ext in ['*.jpg', '*.jpeg', '*.bmp','*.png']:
         image_files.extend(glob.glob(f'{input_dir}/**/{ext}', recursive=True))
     if len(image_files) == 0:
         return False
@@ -30,7 +30,7 @@ def has_valid_annotationdir(input_dir):
 
 def validate_input(input_dir):
     if not has_valid_imagedir(input_dir):
-        print("Please provide a valid image directory with at least one input image (jpg, jpeg, bmp).")
+        print("Please provide a valid image directory with at least one input image (jpg, jpeg, bmp, png).")
         sys.exit(1)
     if not has_valid_annotationdir(input_dir):
         print("Please provide a valid annotations directory with at exactly one COCO annotations file (json).")
@@ -77,7 +77,7 @@ def create_splits(ids, test_ratio, val_ratio):
 
 def copy_images(input_dir,output_dir,name,ids, split, img_id_map):
     image_paths = []
-    for ext in ['*.jpg', '*.bmp', '*.jpeg']:
+    for ext in ['*.jpg', '*.bmp', '*.jpeg','*.png']:
         image_paths.extend(glob.glob(f'{input_dir}/**/{ext}', recursive=True))
     print(f'Copying {split} images...')
     for id in tqdm(ids):
@@ -124,7 +124,7 @@ def create_annotations(output_dir,name,split,coco,img_ids):
             bbox_string = ' '.join([str(x) for x in yolo_bbox])
             ann_strings.append(f'{cat_id} {bbox_string}')
 
-        img_ann_strings = ' '.join(ann_strings)
+        img_ann_strings = '\b'.join(ann_strings)
         image_identifier = os.path.splitext(img['file_name'])[0]
         output_path = f'{output_dir}/{name}/labels/{split}/{image_identifier}.txt'
         with open(output_path, 'w') as f:
