@@ -124,7 +124,7 @@ def create_annotations(output_dir,name,split,coco,img_ids):
             bbox_string = ' '.join([str(x) for x in yolo_bbox])
             ann_strings.append(f'{cat_id} {bbox_string}')
 
-        img_ann_strings = '\b'.join(ann_strings)
+        img_ann_strings = '\n'.join(ann_strings)
         image_identifier = os.path.splitext(img['file_name'])[0]
         output_path = f'{output_dir}/{name}/labels/{split}/{image_identifier}.txt'
         with open(output_path, 'w') as f:
